@@ -1,0 +1,597 @@
+﻿<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Литературный навигатор</title>
+
+<style>
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background: linear-gradient(135deg, #eef2ff, #f8f5ff);
+    color: #25233a;
+    min-height: 100vh;
+}
+
+header {
+    background: #5146a5;
+    color: white;
+    padding: 18px 25px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.logo {
+    font-size: 22px;
+    font-weight: bold;
+}
+
+.subtitle {
+    font-size: 13px;
+    opacity: 0.85;
+}
+
+.container {
+    max-width: 900px;
+    margin: 40px auto;
+    padding: 20px;
+}
+
+.card {
+    background: white;
+    border-radius: 20px;
+    padding: 35px;
+    box-shadow: 0 8px 30px rgba(0,0,0,0.08);
+}
+
+h1 {
+    text-align: center;
+    color: #5146a5;
+    margin-top: 0;
+}
+
+h2 {
+    color: #5146a5;
+}
+
+.intro {
+    text-align: center;
+    color: #666;
+    line-height: 1.6;
+    margin-bottom: 30px;
+}
+
+.topics {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 15px;
+}
+
+.topic {
+    border: 2px solid #e5e2f5;
+    background: #faf9ff;
+    padding: 20px;
+    border-radius: 15px;
+    cursor: pointer;
+    font-size: 16px;
+    text-align: left;
+    transition: 0.2s;
+}
+
+.topic:hover {
+    border-color: #5146a5;
+    transform: translateY(-2px);
+}
+
+.topic.selected {
+    background: #5146a5;
+    color: white;
+    border-color: #5146a5;
+}
+
+.icon {
+    font-size: 26px;
+    display: block;
+    margin-bottom: 8px;
+}
+
+button.main {
+    display: block;
+    margin: 30px auto 0;
+    background: #5146a5;
+    color: white;
+    border: none;
+    padding: 15px 30px;
+    border-radius: 12px;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+button.main:hover {
+    background: #40368d;
+}
+
+.secondary {
+    background: white;
+    color: #5146a5;
+    border: 2px solid #5146a5;
+    padding: 12px 20px;
+    border-radius: 10px;
+    cursor: pointer;
+    margin: 5px;
+}
+
+.book {
+    border-left: 5px solid #5146a5;
+    background: #f7f6ff;
+    padding: 20px;
+    border-radius: 12px;
+    margin: 20px 0;
+}
+
+.book-title {
+    font-size: 27px;
+    font-weight: bold;
+    color: #5146a5;
+}
+
+.author {
+    color: #777;
+    margin-top: 5px;
+}
+
+.tag {
+    display: inline-block;
+    background: #e8e5ff;
+    color: #40368d;
+    padding: 7px 12px;
+    border-radius: 20px;
+    margin: 4px;
+    font-size: 13px;
+}
+
+.info {
+    margin-top: 22px;
+    line-height: 1.6;
+}
+
+.question {
+    background: #fff7df;
+    border-radius: 12px;
+    padding: 18px;
+    margin-top: 20px;
+}
+
+.hidden {
+    display: none;
+}
+
+.back {
+    color: #5146a5;
+    cursor: pointer;
+    margin-bottom: 20px;
+    display: inline-block;
+}
+
+textarea {
+    width: 100%;
+    min-height: 100px;
+    border: 2px solid #e5e2f5;
+    border-radius: 10px;
+    padding: 12px;
+    font-family: Arial;
+    font-size: 15px;
+}
+
+.footer {
+    text-align: center;
+    color: #888;
+    font-size: 12px;
+    margin-top: 25px;
+}
+
+.warning {
+    background: #eef7ff;
+    padding: 15px;
+    border-radius: 10px;
+    font-size: 13px;
+    margin-top: 25px;
+    line-height: 1.5;
+}
+
+@media (max-width: 650px) {
+    .topics {
+        grid-template-columns: 1fr;
+    }
+
+    .container {
+        margin: 15px auto;
+    }
+
+    .card {
+        padding: 22px;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<header>
+    <div>
+        <div class="logo">📚 Литературный навигатор</div>
+        <div class="subtitle">Русская литература для осмысленного чтения</div>
+    </div>
+</header>
+
+<div class="container">
+
+<!-- ГЛАВНАЯ -->
+<div id="home" class="card">
+
+<h1>Какую книгу выбрать?</h1>
+
+<p class="intro">
+Выбери тему, которая тебе интересна.
+Навигатор предложит произведение русской литературы,
+объяснит свой выбор и задаст вопросы для размышления.
+</p>
+
+<div class="topics">
+
+<button class="topic" onclick="choose('classmates')">
+<span class="icon">👥</span>
+Отношения с одноклассниками
+</button>
+
+<button class="topic" onclick="choose('misunderstanding')">
+<span class="icon">💬</span>
+Меня интересует герой, которого не понимают
+</button>
+
+<button class="topic" onclick="choose('help')">
+<span class="icon">🤝</span>
+Трудно принять помощь
+</button>
+
+<button class="topic" onclick="choose('boundaries')">
+<span class="icon">🛡️</span>
+Личные границы и умение возражать
+</button>
+
+<button class="topic" onclick="choose('love')">
+<span class="icon">❤️</span>
+Первая любовь и отношения с родителями
+</button>
+
+<button class="topic" onclick="choose('mistake')">
+<span class="icon">🌱</span>
+Ошибка, ответственность и возможность всё исправить
+</button>
+
+<button class="topic" onclick="choose('recognition')">
+<span class="icon">⭐</span>
+Признание и внимание к чувствам других
+</button>
+
+</div>
+
+<div class="warning">
+<strong>Важно:</strong> навигатор помогает выбирать и обсуждать
+художественную литературу. Он не проводит психологическую диагностику
+и не заменяет помощь специалиста.
+</div>
+
+</div>
+
+
+<!-- РЕЗУЛЬТАТ -->
+<div id="result" class="card hidden">
+
+<span class="back" onclick="goHome()">← Вернуться к темам</span>
+
+<h2>📖 Возможно, тебе подойдёт эта книга</h2>
+
+<div class="book">
+
+<div id="bookTitle" class="book-title"></div>
+<div id="author" class="author"></div>
+
+<div id="tags" style="margin-top:15px;"></div>
+
+</div>
+
+<div class="info">
+
+<h3>💡 Почему я предлагаю эту книгу?</h3>
+
+<p id="reason"></p>
+
+<h3>🔎 На что обратить внимание при чтении?</h3>
+
+<p id="attention"></p>
+
+</div>
+
+<div class="question">
+
+<strong>💭 Вопрос для размышления</strong>
+
+<p id="question"></p>
+
+</div>
+
+<div style="text-align:center;margin-top:25px;">
+
+<button class="main" onclick="afterReading()">
+📖 Выбираю эту книгу
+</button>
+
+<button class="secondary" onclick="anotherBook()">
+🔄 Предложить другой вариант
+</button>
+
+</div>
+
+</div>
+
+
+<!-- ПОСЛЕ ЧТЕНИЯ -->
+<div id="after" class="card hidden">
+
+<span class="back" onclick="goHome()">← На главную</span>
+
+<h1>📚 После чтения</h1>
+
+<p class="intro">
+Здесь нет единственного правильного ответа.
+Попробуй объяснить своё впечатление, опираясь на произведение.
+</p>
+
+<h3>1. Какой эпизод запомнился тебе больше всего?</h3>
+<textarea placeholder="Напиши свой ответ..."></textarea>
+
+<h3>2. Почему именно этот эпизод привлёк твоё внимание?</h3>
+<textarea placeholder="Объясни своё мнение..."></textarea>
+
+<h3>3. Изменилось ли твоё отношение к кому-нибудь из героев?</h3>
+
+<select style="padding:12px;border-radius:10px;width:100%;font-size:15px;">
+<option>Выбери ответ</option>
+<option>Да</option>
+<option>Нет</option>
+<option>Не могу определить</option>
+</select>
+
+<h3>4. Какой вопрос после чтения ты хотел бы обсудить?</h3>
+
+<textarea placeholder="Напиши вопрос..."></textarea>
+
+<button class="main" onclick="finish()">
+Сохранить ответ
+</button>
+
+</div>
+
+
+<!-- ФИНАЛ -->
+<div id="finish" class="card hidden">
+
+<h1>Спасибо за ответ! 📚</h1>
+
+<p class="intro">
+Читатели могут по-разному воспринимать одно произведение.
+Важно не найти единственный «правильный» ответ,
+а уметь объяснить своё мнение с опорой на текст.
+</p>
+
+<button class="main" onclick="goHome()">
+Выбрать другую книгу
+</button>
+
+</div>
+
+<div class="footer">
+Исследовательский проект «Библиотерапия как средство психологической
+поддержки подростков: разработка ИИ-навигатора по русской литературе»
+</div>
+
+</div>
+
+
+<script>
+
+let currentTopic = "";
+
+const books = {
+
+classmates: {
+title: "«Чучело»",
+author: "Владимир Железников",
+tags: ["отношения с группой", "отвержение", "достоинство"],
+reason:
+"Лена Бессольцева оказывается отвергнутой одноклассниками. Через её историю можно рассмотреть не только положение человека, оказавшегося в изоляции, но и поступки участников конфликта и тех, кто наблюдает за происходящим.",
+attention:
+"Обрати внимание на роль прозвища «Чучело», поступки Лены и Димы Сомова, а также на то, как ведут себя остальные одноклассники.",
+question:
+"Как поступки героев показывают влияние группы на отдельного человека?"
+},
+
+misunderstanding: {
+title: "«Алые паруса»",
+author: "Александр Грин",
+tags: ["непонимание", "мечта", "право отличаться"],
+reason:
+"Ассоль сталкивается с насмешками и непониманием окружающих. Произведение позволяет задуматься о том, как человек сохраняет собственный взгляд на мир, когда другие его не разделяют.",
+attention:
+"Проследи, как жители относятся к Ассоль и чем их представление о ней отличается от того образа героини, который постепенно открывается читателю.",
+question:
+"Почему мнение окружающих не становится единственным основанием для того, как Ассоль воспринимает себя?"
+},
+
+help: {
+title: "«Уроки французского»",
+author: "Валентин Распутин",
+tags: ["одиночество", "поддержка", "доверие"],
+reason:
+"Герой оказывается вдали от дома и переживает материальные трудности. При этом ему непросто принимать помощь взрослого человека.",
+attention:
+"Обрати внимание на отношения героя с учительницей и на то, почему помощь приходится оказывать необычным способом.",
+question:
+"Почему человеку иногда бывает трудно принять помощь, даже когда она ему необходима?"
+},
+
+boundaries: {
+title: "«Размазня»",
+author: "Антон Чехов",
+tags: ["личные границы", "давление", "неравенство"],
+reason:
+"В рассказе показан разговор, в котором один человек обладает значительно большей властью, чем другой. Юлии Васильевне трудно возражать даже тогда, когда с ней поступают несправедливо.",
+attention:
+"Проследи, каким образом рассказчик оказывает давление на героиню и почему ей трудно защищать свои интересы.",
+question:
+"Что мешает Юлии Васильевне возражать и можно ли считать способ её «обучения» уважительным?"
+},
+
+love: {
+title: "«Вам и не снилось…»",
+author: "Галина Щербакова",
+tags: ["первая любовь", "родители и дети", "доверие"],
+reason:
+"Произведение позволяет рассмотреть первую любовь подростков и отношения детей со взрослыми, которые пытаются влиять на их выбор.",
+attention:
+"Обрати внимание не только на чувства подростков, но и на мотивы взрослых и последствия их вмешательства.",
+question:
+"Где проходит граница между заботой взрослых и вмешательством в личный выбор подростка?"
+},
+
+mistake: {
+title: "«Тёплый хлеб»",
+author: "Константин Паустовский",
+tags: ["ошибка", "ответственность", "исправление"],
+reason:
+"Филька совершает жестокий поступок, а затем сталкивается с его последствиями. Сюжет позволяет проследить путь от ошибки к осознанию ответственности и попытке исправить причинённый вред.",
+attention:
+"Следи за тем, как меняются не только слова Фильки, но прежде всего его поступки.",
+question:
+"Какие действия героя показывают его изменение убедительнее, чем слова?"
+},
+
+recognition: {
+title: "«Безумная Евдокия»",
+author: "Анатолий Алексин",
+tags: ["признание", "семья", "чувства других"],
+reason:
+"Произведение позволяет задуматься о стремлении человека быть особенным и о том, насколько важно замечать переживания окружающих.",
+attention:
+"Попробуй рассмотреть события с позиций разных героев, а не только одного персонажа.",
+question:
+"Почему одна и та же ситуация может совершенно по-разному восприниматься её участниками?"
+}
+
+};
+
+
+function choose(topic) {
+
+currentTopic = topic;
+
+showBook(books[topic]);
+
+}
+
+
+function showBook(book) {
+
+document.getElementById("home").classList.add("hidden");
+document.getElementById("after").classList.add("hidden");
+document.getElementById("finish").classList.add("hidden");
+
+document.getElementById("result").classList.remove("hidden");
+
+document.getElementById("bookTitle").innerText = book.title;
+document.getElementById("author").innerText = book.author;
+document.getElementById("reason").innerText = book.reason;
+document.getElementById("attention").innerText = book.attention;
+document.getElementById("question").innerText = book.question;
+
+let tagHTML = "";
+
+book.tags.forEach(function(tag) {
+tagHTML += '<span class="tag">' + tag + '</span>';
+});
+
+document.getElementById("tags").innerHTML = tagHTML;
+
+window.scrollTo(0,0);
+
+}
+
+
+function anotherBook() {
+
+if(currentTopic === "classmates") {
+
+showBook({
+title: "«Алые паруса»",
+author: "Александр Грин",
+tags: ["непонимание окружающих", "мечта", "самостоятельность"],
+reason:
+"Если тебе важнее тема непонимания окружающих, можно посмотреть на неё с другой стороны. Ассоль не оказывается в той же ситуации, что Лена Бессольцева, поэтому эти произведения позволяют сравнить разные формы отношения человека и общества.",
+attention:
+"Сравни отношение окружающих к Ассоль с тем, какой героиню показывает сам автор.",
+question:
+"Всегда ли мнение большинства помогает правильно понять другого человека?"
+});
+
+} else {
+
+alert("Для этой темы в демонстрационной версии пока подготовлено одно произведение.");
+
+}
+
+}
+
+
+function afterReading() {
+
+document.getElementById("result").classList.add("hidden");
+document.getElementById("after").classList.remove("hidden");
+
+window.scrollTo(0,0);
+
+}
+
+
+function finish() {
+
+document.getElementById("after").classList.add("hidden");
+document.getElementById("finish").classList.remove("hidden");
+
+window.scrollTo(0,0);
+
+}
+
+
+function goHome() {
+
+document.getElementById("result").classList.add("hidden");
+document.getElementById("after").classList.add("hidden");
+document.getElementById("finish").classList.add("hidden");
+
+document.getElementById("home").classList.remove("hidden");
+
+window.scrollTo(0,0);
+
+}
+
+</script>
+
+</body>
+</html>
